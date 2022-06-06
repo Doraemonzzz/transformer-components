@@ -15,6 +15,9 @@
 - 2022/6/4: 初始化仓库，实现Vanilla Transformer；
 
 
+## 规划
+- 2022/6/6 ~ 2022/6/12: 确定传参方案, 迁移fairseq data preprocess, 跑通lm
+
 
 ## To DO
 
