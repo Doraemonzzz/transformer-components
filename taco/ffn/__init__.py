@@ -1,1 +1,1 @@
-from .vanilla_feedforward import VanillaFeedForward
+from .vanilla_ffn import VanillaFeedForward

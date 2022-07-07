@@ -1,5 +1,5 @@
 import torch
-from xformers import VanillaTransformer
+from taco.xformers import VanillaTransformer
 
 num_layers = 2
 embed_dim = 128

@@ -1,0 +1,16 @@
+README.md
+setup.py
+taco/__init__.py
+taco.egg-info/PKG-INFO
+taco.egg-info/SOURCES.txt
+taco.egg-info/dependency_links.txt
+taco.egg-info/requires.txt
+taco.egg-info/top_level.txt
+taco/attention/__init__.py
+taco/attention/utils.py
+taco/attention/vanilla_attention.py
+taco/ffn/__init__.py
+taco/ffn/vanilla_feedforward.py
+taco/xformers/__init__.py
+taco/xformers/block.py
+taco/xformers/vanilla_transformer.py

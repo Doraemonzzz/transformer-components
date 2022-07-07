@@ -2,9 +2,13 @@ from einops import rearrange
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from utils import MINUS_INFINITY
 
 class VanillaAttention(nn.Module):
+    """Multi-headed attention.
+
+    See "Attention Is All You Need" for more details.
+    """
+
     def __init__(
         self,
         embed_dim,
@@ -27,55 +31,59 @@ class VanillaAttention(nn.Module):
         self.out_proj = nn.Linear(self.embed_dim, self.embed_dim)
         self.dropout = nn.Dropout(dropout)
         self.scale = self.head_dim ** -0.5
-    
+
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        nn.init.xavier_uniform_(self.q_proj.weight)
+        nn.init.normal_(self.q_proj.bias)
+        nn.init.xavier_uniform_(self.k_proj.weight)
+        nn.init.normal_(self.k_proj.bias)
+        nn.init.xavier_uniform_(self.v_proj.weight)
+        nn.init.normal_(self.v_proj.bias)
+        nn.init.xavier_uniform_(self.out_proj.weight)
+        nn.init.normal_(self.out_proj.bias)
+
     def forward(
-        self, 
-        query, 
-        key, 
-        value, 
-        attn_mask=None
+        self,
+        x,
+        y=None,
+        attn_mask=None,
     ):
-        """Forward function of vanilla attention.
-           B is the batch size, 
-           N is the target sequence length, 
-           M is the source sequence length, 
-           E is the embedding dimension.
-
-        Args:
-            query (tensor): (B, N, E)
-            key (tensor): (B, M, E)
-            value (tensor): (B, M, E)
-            attn_mask (tensor): (N, M)
-
-        Returns:
-            output (tensor): (B, N, E)
         """
-        b, n, e = query.shape
-        m = key.shape[1]
-        # projection
-        # b, n, e; b, m, e
-        q = self.q_proj(query)
-        k = self.k_proj(key)
-        v = self.v_proj(value)
-        # reshape
-        # b, h, n, d; b, h, m, d
-        q, k, v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h=self.num_heads), [q, k, v])
-        # compute
-        # b, h, n, m
-        dots = torch.einsum('...nd,...md->...nm', q, k) * self.scale
-        # weight
-        weight = F.softmax(dots, dim=-1)
-        weight = self.dropout(weight)
+        - x: (B, N, E), where N is the sequence length, B is the batch size, E is
+          the embedding dimension.
+        - y: (B, M, E), where M is the sequence length, B is the batch size, E is
+          the embedding dimension.
+        - attn_mask: (N, M).
+        """
+        if y == None:
+            y = x
+        # B, N, E
+        q = self.q_proj(x)
+        # B, M, E
+        k = self.k_proj(y)
+        # B, M, D
+        v = self.v_proj(y)
+        # B, H, N, E
+        q, k, v = map(lambda x: rearrange(x, 'b n (h d) -> b h n d', h=self.num_heads), [q, k, v])
+
+        b, h, n, d = q.shape
+        scaling = d ** -0.5
+        score = torch.einsum('bhnd,bhmd->bhnm', q, k) * scaling
+        q = q * scaling
+
         if self.causal:
             if attn_mask == None:
-                attn_mask = torch.tril(torch.ones(n, n)==1, diagonal=-1).to(q)
-            weight = weight.masked_fill(attn_mask==0, MINUS_INFINITY)
-        # output
-        # b, h, n, d
-        output = torch.einsum('...nm,...md->...nd', weight, v)
-        # b, n, e
-        output = rearrange(output, 'b h n d -> b n (h d)')
-        output = self.out_proj(output)
+                attn_mask = (torch.triu(torch.ones(n, n))==1).transpose(0, 1)
+                attn_mask = attn_mask.float().masked_fill(attn_mask==0, float('-inf')).to(q)
+            score = score.masked_fill(attn_mask==float("-inf"), float("-inf"))
+        weights = F.softmax(score, dim=-1)
+        weights = self.dropout(weights)
+        attn_output = torch.einsum('bhnm,bhmd->bhnd', weights, v)
+        # reshape
+        attn_output = rearrange(attn_output, 'b h n d -> b n (h d)')
+        # B, N, E
+        attn_output = self.out_proj(attn_output)
 
-        return output
-
+        return attn_output

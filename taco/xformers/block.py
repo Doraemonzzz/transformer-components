@@ -1,8 +1,8 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from attention import VanillaAttention
-from ffn import VanillaFeedForward
-from utils import get_norm
+from ..attention import VanillaAttention
+from ..ffn import VanillaFeedForward
+from ..utils import get_norm
 
 class TransformerBlock(nn.Module):
     def __init__(
@@ -26,9 +26,9 @@ class TransformerBlock(nn.Module):
             self.attn = VanillaAttention(embed_dim=embed_dim, num_heads=num_heads, causal=causal, dropout=attn_dropout)
 
         if ffn_type == "vanilla":
-            self.ffn = VanillaFeedForward(embed_dim=embed_dim, hidden_dim=hidden_dim, dropout=ffn_dropout, act_fun=act_fun)
+            self.ffn = VanillaFeedForward(embed_dim=embed_dim, hidden_dim=hidden_dim, act_dropout=ffn_dropout, act_fun=act_fun)
         else:
-            self.ffn = VanillaFeedForward(embed_dim=embed_dim, hidden_dim=hidden_dim, dropout=ffn_dropout, act_fun=act_fun)
+            self.ffn = VanillaFeedForward(embed_dim=embed_dim, hidden_dim=hidden_dim, act_dropout=ffn_dropout, act_fun=act_fun)
 
         self.attn_norm = get_norm(norm_type, embed_dim)
         self.ffn_norm = get_norm(norm_type, embed_dim)
