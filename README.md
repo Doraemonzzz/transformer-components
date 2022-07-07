@@ -1,4 +1,5 @@
 
+Transformer Ccomponents(taco)
 
 ## 动机
 
@@ -14,6 +15,7 @@
 
 - 2022/6/4: 初始化仓库，实现Vanilla Transformer；
 
+删除需要手动删除egg-info。
 
 ## 规划
 - 2022/6/6 ~ 2022/6/12: 确定传参方案, 迁移fairseq data preprocess, 跑通lm
