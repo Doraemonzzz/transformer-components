@@ -23,8 +23,7 @@ Transformer Components(tacos)
 
 ## To DO
 
-- 确定数据集；
-- 跑通ALM, MLM；
+- 完成英文版readme。
 
 
 

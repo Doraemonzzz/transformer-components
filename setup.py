@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='tacos',
-    version='0.0.0',
+    version='0.0.1',
     description='Transformer components',
     author='Doraemonzzz',
     author_email='doraemon_zzz@163.com',
