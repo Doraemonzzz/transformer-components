@@ -1,7 +1,8 @@
-from einops import rearrange
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+from einops import rearrange
 
 class VanillaAttention(nn.Module):
     """Multi-headed attention.
@@ -31,18 +32,6 @@ class VanillaAttention(nn.Module):
         self.out_proj = nn.Linear(self.embed_dim, self.embed_dim)
         self.dropout = nn.Dropout(dropout)
         self.scale = self.head_dim ** -0.5
-
-        self.reset_parameters()
-
-    def reset_parameters(self):
-        nn.init.xavier_uniform_(self.q_proj.weight)
-        nn.init.normal_(self.q_proj.bias)
-        nn.init.xavier_uniform_(self.k_proj.weight)
-        nn.init.normal_(self.k_proj.bias)
-        nn.init.xavier_uniform_(self.v_proj.weight)
-        nn.init.normal_(self.v_proj.bias)
-        nn.init.xavier_uniform_(self.out_proj.weight)
-        nn.init.normal_(self.out_proj.bias)
 
     def forward(
         self,
