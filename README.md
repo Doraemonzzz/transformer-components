@@ -16,15 +16,6 @@ Transformer Components(tacos)
 - 2022/7/4~2022/7/10: 
   - [x] 完成transformer基本部件的实现；
   - [x] 完成pypi上传；
-- 2022/7/4~2022/7/10：
-  - [x] 完成mlm测试；
-  - [x] 完成char level lm测试；
-  - [x] 完成vit迁移（基于fairseq或者启一个子项目）；
-  - [x] 完成数据预处理测试；
-    - [x] enwik8预处理；
-    - [x] Wikitext103预处理；
-  - [x] 完成代码梳理；
-  - [x] 完成fairseq版本和trev版本性能基本对齐；
 
 
 
