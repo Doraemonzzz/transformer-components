@@ -13,17 +13,29 @@ Transformer Components(tacos)
 
 ## 更新日志
 
-- 2022/6/4: 初始化仓库，实现Vanilla Transformer；
+- 2022/7/4~2022/7/10: 
+  - [x] 完成transformer基本部件的实现；
+  - [x] 完成pypi上传；
+- 2022/7/4~2022/7/10：
+  - [x] 完成mlm测试；
+  - [x] 完成char level lm测试；
+  - [x] 完成vit迁移（基于fairseq或者启一个子项目）；
+  - [x] 完成数据预处理测试；
+    - [x] enwik8预处理；
+    - [x] Wikitext103预处理；
+  - [x] 完成代码梳理；
+  - [x] 完成fairseq版本和trev版本性能基本对齐；
 
-删除需要手动删除egg-info。
+
 
 ## 规划
-- 2022/6/6 ~ 2022/6/12: 确定传参方案, 迁移fairseq data preprocess, 跑通lm
-
-
-## To DO
-
-- 完成英文版readme。
+- 2022/7/11~2022/7/17：
+  - [ ] 完成代码自动release；
+  - [ ] 完成英文版readme；
+  - [ ] 实现各个版本的norm；
+  - [ ] 实现linear attention；
+  - [ ] 实现测试代码；
+  - [ ] 完成tacos中的transformer部分，上周只完成的部件的实现；
 
 
 
