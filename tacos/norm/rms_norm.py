@@ -85,10 +85,7 @@ class GatedRMSNorm(nn.Module):
         self.bias = bias
 
         self.scale = nn.Parameter(torch.ones(d))
-        self.register_parameter("scale", self.scale)
         self.gate = nn.Parameter(torch.ones(d))
-        self.register_parameter("scale", self.scale)
-
 
     def forward(self, x):
         norm_x = x.norm(2, dim=-1, keepdim=True)
