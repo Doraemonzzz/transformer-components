@@ -25,6 +25,10 @@ def get_activation_fn(activation):
         return f
     elif activation == "silu":
         return F.silu
+    elif activation == "relu2":
+        def f(x):
+            return F.relu(x) ** 2
+        return f
     else:
         return lambda x: x
 
@@ -39,3 +43,37 @@ def get_norm(norm_type, embed_dim):
         return ScaleNorm(embed_dim)
     else:
         return nn.LayerNorm(embed_dim)
+    
+def linear_product(q, k, v, causal=False, attn_mask=None, eps=1e-4):
+    """_summary_
+
+    Args:
+        q (Tensor): ..., N, E1, where N is the sequence length, E1 is the embedding dimension.
+        k (Tensor): ..., M, E1, where M is the sequence length, E1 is the embedding dimension.
+        v (Tensor): ..., M, E2, where M is the sequence length, E2 is the embedding dimension.
+
+    Returns:
+        o (Tensor): ..., N, E2
+    """
+    if causal:
+        # to do: fast causal linear product
+        n = q.shape(-2)
+        m = k.shape(-2)
+        if (attn_mask == None):
+            attn_mask = (torch.triu(torch.ones(n, m))==1).transpose(0, 1)
+            attn_mask = attn_mask.float().attn_masked_fill(attn_mask==0, float('-inf')).to(q)
+        weights = torch.einsum('...nd,...md->...nm', q, k)
+        weights = weights.attn_masked_fill(attn_mask==float("-inf"), 0)
+        denorm = weights.sum(dim=-1, keepdim=True)
+        denorm = torch.clamp_min(denorm, eps)
+        weights = weights / denorm
+        output = torch.einsum('...nm,...md->...nd', weights, v)
+    else:
+        kv = torch.einsum('...nd,...ne->...de', k, v)
+        output = torch.einsum('...nd,...de->...ne', q, kv)
+        # q(k^T1)
+        denorm = torch.einsum('...nd,...d->...n', q, torch.sum(k, axis=-2)).unsqueeze(-1)
+        denorm = torch.clamp_min(denorm, eps)
+        output = output / denorm
+        
+    return output
