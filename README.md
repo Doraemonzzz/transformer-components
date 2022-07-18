@@ -16,14 +16,15 @@ Transformer Components(tacos)
 - 2022/7/4~2022/7/10: 
   - [x] 完成transformer基本部件的实现；
   - [x] 完成pypi上传；
+- 2022/7/11~2022/7/17：
+  - [x] 实现各个版本的norm；
 
 
 
 ## 规划
-- 2022/7/11~2022/7/17：
+- 2022/7/18~2022/7/24：
   - [ ] 完成代码自动release；
   - [ ] 完成英文版readme；
-  - [ ] 实现各个版本的norm；
   - [ ] 实现linear attention；
   - [ ] 实现测试代码；
   - [ ] 完成tacos中的transformer部分，上周只完成的部件的实现；
