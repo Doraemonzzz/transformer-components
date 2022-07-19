@@ -57,13 +57,13 @@ def linear_product(q, k, v, causal=False, attn_mask=None, eps=1e-4):
     """
     if causal:
         # to do: fast causal linear product
-        n = q.shape(-2)
-        m = k.shape(-2)
+        n = q.shape[-2]
+        m = k.shape[-2]
         if (attn_mask == None):
             attn_mask = (torch.triu(torch.ones(n, m))==1).transpose(0, 1)
-            attn_mask = attn_mask.float().attn_masked_fill(attn_mask==0, float('-inf')).to(q)
+            attn_mask = attn_mask.float().masked_fill(attn_mask==0, float('-inf')).to(q)
         weights = torch.einsum('...nd,...md->...nm', q, k)
-        weights = weights.attn_masked_fill(attn_mask==float("-inf"), 0)
+        weights = weights.masked_fill(attn_mask==float("-inf"), 0)
         denorm = weights.sum(dim=-1, keepdim=True)
         denorm = torch.clamp_min(denorm, eps)
         weights = weights / denorm

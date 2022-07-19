@@ -60,7 +60,7 @@ class LinearAttention(nn.Module):
         q = self.act(q)
         k = self.act(k)
 
-        attn_output = linear_product(q, k, v)
+        attn_output = linear_product(q, k, v, causal=self.causal, attn_mask=attn_mask)
         # reshape
         attn_output = rearrange(attn_output, 'b h n d -> b n (h d)')
         # dropout 
