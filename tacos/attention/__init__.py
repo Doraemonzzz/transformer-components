@@ -1,2 +1,4 @@
 from .vanilla_attention import VanillaAttention
 from .linear_attention import LinearAttention
+from .performer_attention import PerformerAttention
+from .random_feature_attention import RandomFeatureAttention

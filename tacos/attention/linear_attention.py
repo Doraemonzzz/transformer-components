@@ -4,8 +4,8 @@ import torch.nn.functional as F
 
 from einops import rearrange
 
-from ..utils import linear_product
-from ..utils import get_activation_fn
+from tacos.utils import linear_product
+from tacos.utils import get_activation_fn
 
 class LinearAttention(nn.Module):
     def __init__(

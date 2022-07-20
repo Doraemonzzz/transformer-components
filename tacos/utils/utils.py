@@ -1,7 +1,7 @@
 import torch.nn.functional as F
 import torch.nn as nn
 import torch
-from .norm import *
+from tacos.norm import *
 
 NEG_INFINITY = float('-inf')
 POS_INFINITY = float('inf')

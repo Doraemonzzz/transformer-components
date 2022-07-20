@@ -1,5 +1,5 @@
 import torch.nn as nn
-from ..utils import get_activation_fn
+from tacos.utils import get_activation_fn
 
 class VanillaFeedForward(nn.Module):
     def __init__(
