@@ -8,4 +8,5 @@ e = 256
 model = PerformerAttention(e, h, 64)
 x = torch.randn(b, n, e)
 res = model.test(x)
+print(model)
 print(res)
