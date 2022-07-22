@@ -64,16 +64,16 @@ def linear_product(q, k, v, causal=False, attn_mask=None, eps=1e-4):
             attn_mask = attn_mask.float().masked_fill(attn_mask==0, float('-inf')).to(q)
         weights = torch.einsum('...nd,...md->...nm', q, k)
         weights = weights.masked_fill(attn_mask==float("-inf"), 0)
-        denorm = weights.sum(dim=-1, keepdim=True)
-        denorm = torch.clamp_min(denorm, eps)
-        weights = weights / denorm
+        denom = weights.sum(dim=-1, keepdim=True)
+        denom = torch.clamp_min(denom, eps)
+        weights = weights / denom
         output = torch.einsum('...nm,...md->...nd', weights, v)
     else:
         kv = torch.einsum('...nd,...ne->...de', k, v)
         output = torch.einsum('...nd,...de->...ne', q, kv)
         # q(k^T1)
-        denorm = torch.einsum('...nd,...d->...n', q, torch.sum(k, axis=-2)).unsqueeze(-1)
-        denorm = torch.clamp_min(denorm, eps)
-        output = output / denorm
+        denom = torch.einsum('...nd,...d->...n', q, torch.sum(k, axis=-2)).unsqueeze(-1)
+        denom = torch.clamp_min(denom, eps)
+        output = output / denom
         
     return output

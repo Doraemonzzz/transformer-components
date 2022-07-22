@@ -27,7 +27,7 @@ Transformer Components(tacos)
   - [ ] 完成英文版readme；
   - [ ] 实现linear attention；
   - [ ] 实现测试代码；
-  - [ ] 完成tacos中的transformer部分，上周只完成的部件的实现；
+  - [ ] 完成tacos中的transformer部分；
 
 
 
