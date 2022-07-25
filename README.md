@@ -18,16 +18,23 @@ Transformer Components(tacos)
   - [x] 完成pypi上传；
 - 2022/7/11~2022/7/17：
   - [x] 实现各个版本的norm；
+- 2022/7/18~2022/7/24：
+  - [x] 实现performer，rfa；
 
 
 
 ## 规划
-- 2022/7/18~2022/7/24：
-  - [ ] 完成代码自动release；
-  - [ ] 完成英文版readme；
-  - [ ] 实现linear attention；
-  - [ ] 实现测试代码；
-  - [ ] 完成tacos中的transformer部分；
+2022/7/25~2022/8/1：
+
+- [ ] 完成tacos中的transformer部分；
+- [ ] 添加PE；
+- [ ] 添加LARA；
+
+待定：
+
+- [ ] 完成代码自动release；
+- [ ] 完成英文版readme；
+- [ ] 实现测试代码；
 
 
 
