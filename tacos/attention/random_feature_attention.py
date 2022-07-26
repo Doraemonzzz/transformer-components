@@ -87,7 +87,7 @@ class RandomFeatureAttention(nn.Module):
         k = self.normalize(k)
         
         # projection and scale
-        scale = self.num_heads ** 0.25
+        scale = self.num_heads ** -0.25
         q_proj = self.projection(q) * scale
         k_proj = self.projection(k) * scale
         
@@ -124,7 +124,7 @@ class RandomFeatureAttention(nn.Module):
         ground_truth = torch.exp(ground_truth)
         
         # projection and scale
-        scale = self.num_heads ** 0.25
+        scale = self.num_heads ** -0.25
         q_proj = self.projection(q) * scale
         k_proj = self.projection(k) * scale
 
