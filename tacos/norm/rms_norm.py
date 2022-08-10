@@ -6,13 +6,11 @@ import torch.functional as F
 
 class SimpleRMSNorm(nn.Module):
     def __init__(self, d, eps=1e-8, bias=False):
-        """
-            Root Mean Square Layer Normalization
-        :param d: model size
-        :param p: partial RMSNorm, valid value [0, 1], default -1.0 (disabled)
-        :param eps:  epsilon value, default 1e-8
-        :param bias: whether use bias term for RMSNorm, disabled by
-            default because RMSNorm doesn't enforce re-centering invariance.
+        """Root Mean Square Layer Normalization
+        - d: model size
+        - p: partial RMSNorm, valid value [0, 1], default -1.0 (disabled)
+        - eps:  epsilon value, default 1e-8
+        - bias: whether use bias term for RMSNorm, disabled by default because RMSNorm doesn't enforce re-centering invariance.
         """
         super().__init__()
         self.eps = eps

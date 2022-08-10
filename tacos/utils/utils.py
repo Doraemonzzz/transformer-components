@@ -2,6 +2,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 import torch
 from tacos.norm import *
+from tacos.rpe import *
 
 NEG_INFINITY = float('-inf')
 POS_INFINITY = float('inf')
@@ -44,8 +45,14 @@ def get_norm(norm_type, embed_dim):
     else:
         return nn.LayerNorm(embed_dim)
     
+def get_de_rpe(de_rpe_type, **kwargs):
+    if de_rpe_type == "rope":
+        return RoPE(**kwargs)
+    else:
+        return None
+    
 def linear_product(q, k, v, causal=False, attn_mask=None, eps=1e-4):
-    """_summary_
+    """linear production
 
     Args:
         q (Tensor): ..., N, E1, where N is the sequence length, E1 is the embedding dimension.

@@ -4,6 +4,8 @@ import torch.nn.functional as F
 
 from einops import rearrange
 
+from ..utils import get_de_rpe
+
 class VanillaAttention(nn.Module):
     """Multi-headed attention.
 
@@ -16,6 +18,8 @@ class VanillaAttention(nn.Module):
         num_heads,
         causal=False,
         dropout=0.0,
+        # others
+        **kwargs,
     ):
         super().__init__()
         self.embed_dim = embed_dim
@@ -32,6 +36,11 @@ class VanillaAttention(nn.Module):
         self.out_proj = nn.Linear(self.embed_dim, self.embed_dim)
         self.dropout = nn.Dropout(dropout)
         self.scale = self.head_dim ** -0.5
+        
+        # update kwargs
+        kwargs["rope_dim"] = self.head_dim
+        # de rpe
+        self.de_rpe = get_de_rpe(**kwargs)
 
     def forward(
         self,
@@ -56,6 +65,10 @@ class VanillaAttention(nn.Module):
         v = self.v_proj(y)
         # B, H, N, E
         q, k, v = map(lambda x: rearrange(x, 'b n (h d) -> b h n d', h=self.num_heads), [q, k, v])
+
+        if self.de_rpe != None:
+            q = self.de_rpe(q, dims=[-2])
+            k = self.de_rpe(k, dims=[-2])
 
         b, h, n, d = q.shape
         scaling = d ** -0.5
